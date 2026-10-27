@@ -1,0 +1,567 @@
+
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>학교생활 아이디어 제안함</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Malgun Gothic", sans-serif;
+      background: #f3f5fa;
+      color: #20283d;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+
+    .header {
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 20px;
+      background: #e5ebff;
+      color: #405bd8;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: 32px;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      color: #778096;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .form-card {
+      padding: 28px;
+      border: 1px solid #e8eaf1;
+      border-radius: 20px;
+      background: white;
+      box-shadow: 0 8px 30px rgba(31, 45, 90, 0.05);
+    }
+
+    .field {
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #dfe3ec;
+      border-radius: 11px;
+      background: white;
+      color: #20283d;
+      font: inherit;
+      outline: none;
+    }
+
+    select:focus, textarea:focus {
+      border-color: #536df0;
+      box-shadow: 0 0 0 3px rgba(83, 109, 240, 0.12);
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: #9299a9;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 11px;
+      background: #536df0;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: #4059d5;
+      transform: translateY(-1px);
+    }
+
+    .message {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      display: block;
+      background: #fff0f0;
+      color: #d83c3c;
+    }
+
+    .message.success {
+      display: block;
+      background: #eaf9ef;
+      color: #21864b;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 35px 0 16px;
+    }
+
+    .list-header h2 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .count {
+      color: #536df0;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .idea-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .idea-card {
+      position: relative;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid #e8eaf1;
+      border-radius: 15px;
+      background: white;
+      animation: appear 0.3s ease;
+      transition: box-shadow 0.3s;
+    }
+
+    .idea-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .category {
+      padding: 6px 10px;
+      border-radius: 7px;
+      background: #eef1ff;
+      color: #4a60d8;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .date {
+      color: #9aa1b1;
+      font-size: 12px;
+    }
+
+    .idea-content {
+      margin: 0;
+      line-height: 1.7;
+      font-size: 15px;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .empty {
+      padding: 38px 20px;
+      border: 1px dashed #d8ddea;
+      border-radius: 15px;
+      color: #9098aa;
+      text-align: center;
+      line-height: 1.8;
+      background: #fafbfe;
+    }
+
+    .empty-icon {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 30px;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #a0a6b4;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    /* 김동하가 포함된 아이디어의 황금빛 반짝임 */
+    .idea-card.sparkle {
+      border: 2px solid #ffd54a;
+      background: linear-gradient(
+        135deg,
+        #fffdf0,
+        #ffffff,
+        #fff4c2,
+        #ffffff
+      );
+      background-size: 300% 300%;
+      animation:
+        appear 0.3s ease,
+        goldGlow 2s ease-in-out infinite,
+        goldBackground 5s linear infinite;
+      box-shadow:
+        0 0 10px #ffd54a,
+        0 0 25px rgba(255, 190, 0, 0.65),
+        0 0 45px rgba(255, 215, 80, 0.35);
+    }
+
+    /* 카드 위에 별빛이 지나가는 효과 */
+    .idea-card.sparkle::before {
+      content: "✦  ✨  ★  ✧  ✨  ✦";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      color: #e9a900;
+      font-size: 23px;
+      pointer-events: none;
+      opacity: 0.75;
+      animation: starSweep 3s linear infinite;
+      white-space: nowrap;
+    }
+
+    /* 작은 별들이 위아래로 반짝임 */
+    .idea-card.sparkle::after {
+      content: "✧";
+      position: absolute;
+      top: 5px;
+      right: 12px;
+      color: #ffbd00;
+      font-size: 27px;
+      pointer-events: none;
+      animation: starTwinkle 0.8s ease-in-out infinite alternate;
+    }
+
+    .idea-card.sparkle .category {
+      background: #fff0a8;
+      color: #8b6000;
+    }
+
+    .idea-card.sparkle .idea-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes goldGlow {
+      0%, 100% {
+        box-shadow:
+          0 0 8px #ffd54a,
+          0 0 18px rgba(255, 190, 0, 0.45);
+      }
+      50% {
+        box-shadow:
+          0 0 18px #ffcc00,
+          0 0 38px rgba(255, 170, 0, 0.8),
+          0 0 55px rgba(255, 220, 80, 0.5);
+      }
+    }
+
+    @keyframes goldBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes starSweep {
+      0% {
+        left: -100%;
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.8;
+      }
+      85% {
+        opacity: 0.8;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+
+    @keyframes starTwinkle {
+      from {
+        transform: scale(0.7) rotate(0deg);
+        opacity: 0.4;
+      }
+      to {
+        transform: scale(1.4) rotate(25deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 25px auto;
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      .form-card {
+        padding: 20px;
+      }
+
+      .idea-card {
+        padding: 16px;
+      }
+    }
+
+    /* 움직임 줄이기 설정을 사용하는 경우 효과 완화 */
+    @media (prefers-reduced-motion: reduce) {
+      .idea-card.sparkle,
+      .idea-card.sparkle::before,
+      .idea-card.sparkle::after {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="header">
+      <span class="badge">SCHOOL COMMUNITY</span>
+      <h1>학교생활 아이디어 제안함 💡</h1>
+      <p class="subtitle">
+        더 나은 학교생활을 위한 여러분의 생각을 들려주세요.<br>
+        작은 아이디어가 우리 학교를 바꿀 수 있습니다.
+      </p>
+    </header>
+
+    <section class="form-card">
+      <form id="ideaForm">
+
+        <div class="field">
+          <label for="category">제안 분야</label>
+          <select id="category">
+            <option value="">분야를 선택하세요</option>
+            <option value="시설">🏫 시설</option>
+            <option value="수업">📚 수업</option>
+            <option value="급식">🍚 급식</option>
+            <option value="기타">✨ 기타</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="content">제안 내용</label>
+          <textarea
+            id="content"
+            maxlength="1000"
+            placeholder="아이디어를 입력하세요.&#10;Enter: 등록 / Shift + Enter: 줄바꿈"
+          ></textarea>
+          <div class="hint">
+            <span id="charCount">0</span> / 1000자
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          아이디어 등록하기 →
+        </button>
+
+        <div id="message" class="message"
+             role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section>
+      <div class="list-header">
+        <h2>등록된 아이디어</h2>
+        <span class="count">
+          TOTAL <span id="ideaCount">0</span>
+        </span>
+      </div>
+
+      <div id="ideaList" class="idea-list">
+        <div class="empty" id="emptyMessage">
+          <span class="empty-icon">📝</span>
+          아직 등록된 아이디어가 없습니다.<br>
+          첫 번째 아이디어를 제안해 보세요!
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      SCHOOL IDEA BOX · 아이디어는 현재 화면에서만 관리됩니다.
+    </footer>
+
+  </main>
+
+  <script>
+    // 화면에서 사용할 HTML 요소 가져오기
+    const ideaForm = document.getElementById("ideaForm");
+    const categoryInput = document.getElementById("category");
+    const contentInput = document.getElementById("content");
+    const message = document.getElementById("message");
+    const ideaList = document.getElementById("ideaList");
+    const ideaCount = document.getElementById("ideaCount");
+    const charCount = document.getElementById("charCount");
+    const emptyMessage = document.getElementById("emptyMessage");
+
+    let totalIdeas = 0;
+
+    // 입력할 때마다 글자 수 갱신
+    contentInput.addEventListener("input", function () {
+      charCount.textContent = contentInput.value.length;
+    });
+
+    // 경고 또는 성공 메시지 표시
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+
+    // 아이디어 카드 생성 후 목록에 추가
+    function addIdea(category, content) {
+      if (emptyMessage) {
+        emptyMessage.style.display = "none";
+      }
+
+      const card = document.createElement("article");
+      card.className = "idea-card";
+
+      // 내용에 '김동하'가 포함되면 반짝임 효과 적용
+      if (content.includes("김동하")) {
+        card.classList.add("sparkle");
+      }
+
+      const top = document.createElement("div");
+      top.className = "idea-top";
+
+      const categoryBadge = document.createElement("span");
+      categoryBadge.className = "category";
+      categoryBadge.textContent = category;
+
+      const date = document.createElement("span");
+      date.className = "date";
+      date.textContent = new Date().toLocaleString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      top.appendChild(categoryBadge);
+      top.appendChild(date);
+
+      const paragraph = document.createElement("p");
+      paragraph.className = "idea-content";
+      paragraph.textContent = content;
+
+      card.appendChild(top);
+      card.appendChild(paragraph);
+
+      // 새 아이디어를 목록의 가장 위에 추가
+      ideaList.prepend(card);
+
+      totalIdeas++;
+      ideaCount.textContent = totalIdeas;
+    }
+
+    // Enter는 등록, Shift + Enter는 줄바꿈
+    contentInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        ideaForm.requestSubmit();
+      }
+    });
+
+    // 등록 버튼 또는 Enter 키를 눌렀을 때 실행
+    ideaForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const category = categoryInput.value;
+      const content = contentInput.value.trim();
+
+      // 분야가 선택되지 않았는지 확인
+      if (!category) {
+        showMessage("⚠️ 제안 분야를 선택해 주세요.", "error");
+        categoryInput.focus();
+        return;
+      }
+
+      // 내용이 비어 있는지 확인
+      if (!content) {
+        showMessage("⚠️ 제안 내용을 입력해 주세요.", "error");
+        contentInput.focus();
+        return;
+      }
+
+      // 정상 입력이면 아이디어 등록
+      addIdea(category, content);
+
+      showMessage(
+        content.includes("김동하")
+          ? "✨ 아이디어 등록 완료! 특별한 황금빛 효과가 발동했습니다!"
+          : "✅ 아이디어가 성공적으로 등록되었습니다!",
+        "success"
+      );
+
+      // 입력창 초기화
+      ideaForm.reset();
+      charCount.textContent = "0";
+      contentInput.focus();
+    });
+  </script>
+</body>
+</html>
